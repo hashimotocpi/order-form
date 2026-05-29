@@ -33,41 +33,32 @@ export default function CompanyForm() {
   };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
   
     alert("submit開始");
   
     try {
+      const res = await fetch("/api/gas", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          mode: "companyRegister",
+          form,
+        }),
+      });
   
-      const formData = new FormData();
-
-formData.append("data", JSON.stringify({
-  mode: "companyRegister",
-  form,
-}));
-
-const res = await fetch(GAS_URL, {
-  method: "POST",
-  body: formData,
-});
-      
       const data = await res.json();
       console.log(data);
-      
+  
       alert("成功");
-  
-      await res.json()
-  
-      alert(text);
   
       navigate("/complete");
   
     } catch (error) {
-  
       console.error(error);
-  
-      alert("fetch失敗");
+      alert("失敗");
     }
   };
 

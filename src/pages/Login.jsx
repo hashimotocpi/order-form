@@ -9,7 +9,7 @@ export default function Login({ onLogin }) {
   const navigate = useNavigate();
 
   const GAS_URL =
-  "https://script.google.com/macros/s/AKfycbyMlCpAhOU7QnbmHpHg7oC9NeubpxYF8X15NCVCVqnUcXmCrjkGGaB4p9wUCvnk-1RL0Q/exec";
+  "https://script.google.com/macros/s/AKfycbytlOISB0RyNhE79CBGop_vV-6FUjuQYn6oiOJD2Lr6VTM1A-3C3Ym0LJiCBDgaXftRqw/exec";
 
 const handleLogin = async (e) => {
 

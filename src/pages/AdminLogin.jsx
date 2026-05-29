@@ -44,7 +44,7 @@ export default function AdminLogin({ onLogin }) {
 
   return (
     <div style={{ padding: 40 }}>
-      <h1>管理者ログイン</h1>
+      <h1>ログイン</h1>
 
       <form onSubmit={handleLogin}>
         <input

@@ -21,7 +21,7 @@ export default function CompanyForm() {
   const [downloaded, setDownloaded] = useState(false);
 
   const GAS_URL =
-  "https://script.google.com/macros/s/AKfycby-WFWUDV-3AVA-VPYfRnWmQD8m49elSZxu70svfB6keLBDiEv9DdReebjo8AeGHoN9Ew/exec";
+  "https://script.google.com/macros/s/AKfycbyJtZsABuzOZGN0mOqZQ-uhuT2NGwAKGJkVlxvM-_jPIKX60TgH0nqa1gEv3edWA9Or_A/exec";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,13 +40,17 @@ export default function CompanyForm() {
   
     try {
   
-      const res = await fetch(GAS_URL, {
-        method: "POST",
-        body: JSON.stringify({
-          mode: "companyRegister",
-          form,
-        }),
-      });
+      const formData = new FormData();
+
+formData.append("data", JSON.stringify({
+  mode: "companyRegister",
+  form,
+}));
+
+const res = await fetch(GAS_URL, {
+  method: "POST",
+  body: formData,
+});
       
       const data = await res.json();
       console.log(data);

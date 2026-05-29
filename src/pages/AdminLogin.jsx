@@ -65,3 +65,5 @@ export default function AdminLogin() {
     </div>
   );
 }
+console.log("id:", id);
+console.log("password:", password);

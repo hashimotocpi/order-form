@@ -8,22 +8,49 @@ export default function Login({ onLogin }) {
 
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const GAS_URL =
+  "https://script.google.com/macros/s/AKfycbyMlCpAhOU7QnbmHpHg7oC9NeubpxYF8X15NCVCVqnUcXmCrjkGGaB4p9wUCvnk-1RL0Q/exec";
 
-    e.preventDefault();
+const handleLogin = async (e) => {
 
-    if (id === "admin" && pass === "1234") {
+  e.preventDefault();
+
+  try {
+
+    const res = await fetch(GAS_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        mode: "login",
+        id,
+        password: pass,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+
+      localStorage.setItem(
+        "token",
+        data.token
+      );
 
       onLogin();
 
-      // ← 追加
-      navigate("/order");
+      navigate("/company");
 
     } else {
 
       alert("IDまたはパスワードが違います");
     }
-  };
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("ログイン失敗");
+  }
+};
 
   return (
     <div style={{ padding: 40 }}>

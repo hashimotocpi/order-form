@@ -42,18 +42,18 @@ export default function CompanyForm() {
   
       const res = await fetch(GAS_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           mode: "companyRegister",
           form,
         }),
       });
+      
+      const data = await res.json();
+      console.log(data);
+      
+      alert("成功");
   
-      alert("fetch成功");
-  
-      const text = await res.text();
+      await res.json()
   
       alert(text);
   

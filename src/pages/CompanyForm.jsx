@@ -21,7 +21,7 @@ export default function CompanyForm() {
   const [downloaded, setDownloaded] = useState(false);
 
   const GAS_URL =
-  "https://script.google.com/macros/s/AKfycbygZmxMw5AX1qD-lxpoQK6fYjrhC7WABoVL8g8pULzn4A4K909Yyg0PbInilo6cc298OQ/exec";
+  "https://script.google.com/macros/s/AKfycbxQJyMt5HyLINwzUI4FFrrbd-fGU3ixtMGm_oMH4ghdPvJdcgq48lOvXec74A7WmV02YQ/exec";
 
   const handleChange = (e) => {
     const { name, value } = e.target;

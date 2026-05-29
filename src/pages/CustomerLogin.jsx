@@ -12,7 +12,7 @@ export default function CustomerLogin() {
     useState("");
 
   const GAS_URL =
-    "https://script.google.com/macros/s/AKfycbxWGV6McU2HKzSBfY0nqVaX0myLP9ypBW7tmYfp8qgJhQuf407jJrNzkgXniYglgu8Acg/exec;
+    "https://script.google.com/macros/s/AKfycbz6E4xOMFrq7pkyR5lowGkbMNn2-JIY2d_O52TLAsVUG3SnM-S1f80SkgGXS7zV6gFQXg/exec";
 
   const login = async (e) => {
 

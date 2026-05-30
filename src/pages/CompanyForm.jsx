@@ -23,19 +23,8 @@ export default function CompanyForm() {
   const GAS_URL =
   "https://script.google.com/macros/s/AKfycbyJtZsABuzOZGN0mOqZQ-uhuT2NGwAKGJkVlxvM-_jPIKX60TgH0nqa1gEv3edWA9Or_A/exec";
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    alert("submit開始");
   
     try {
       const res = await fetch("/api/gas", {
@@ -52,13 +41,12 @@ export default function CompanyForm() {
       const data = await res.json();
       console.log(data);
   
-      alert("成功");
-  
+      alert("送信成功");
       navigate("/complete");
   
     } catch (error) {
       console.error(error);
-      alert("失敗");
+      alert("送信失敗");
     }
   };
 

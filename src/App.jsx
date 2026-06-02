@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Login from "./Login";
-import InquiryForm from "./InquiryForm";
-import OrderForm from "./OrderForm";
+import Login from "./components/Login";
+import InquiryForm from "./components/InquiryForm";
+import OrderForm from "./components/OrderForm";
 
 export default function App() {
   const [user, setUser] = useState(null);

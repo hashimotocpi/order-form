@@ -25,54 +25,51 @@ function App() {
   return (
     <BrowserRouter>
 
-      {!user ? (
-        <Routes>
+      <Routes>
 
-          <Route
-            path="/login"
-            element={
-              <Login
-                setUser={setUser}
-              />
-            }
-          />
+        {/* トップ */}
+        <Route
+          path="/"
+          element={<Navigate to={user ? "/inquiry" : "/login"} />}
+        />
 
-          <Route
-            path="*"
-            element={<Navigate to="/login" />}
-          />
+        {/* ログイン */}
+        <Route
+          path="/login"
+          element={<Login setUser={setUser} />}
+        />
 
-        </Routes>
-      ) : (
-        <Routes>
+        {/* 問い合わせ */}
+        <Route
+          path="/inquiry"
+          element={
+            user ? (
+              <InquiryForm user={user} setUser={setUser} />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
 
-          <Route
-            path="/inquiry"
-            element={
-              <InquiryForm
-                user={user}
-                onLogout={logout}
-              />
-            }
-          />
+        {/* 発注 */}
+        <Route
+          path="/order"
+          element={
+            user ? (
+              <OrderForm user={user} setUser={setUser} />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
 
-          <Route
-            path="/order"
-            element={
-              <OrderForm
-                user={user}
-                onLogout={logout}
-              />
-            }
-          />
+        {/* 保険 */}
+        <Route
+          path="*"
+          element={<Navigate to="/" />}
+        />
 
-          <Route
-            path="*"
-            element={<Navigate to="/inquiry" />}
-          />
-
-        </Routes>
-      )}
+      </Routes>
 
     </BrowserRouter>
   );

@@ -9,6 +9,7 @@ import {
 import Login from "./pages/Login";
 import InquiryForm from "./pages/InquiryForm";
 import OrderForm from "./pages/OrderForm";
+import Layout from "./components/Layout";
 
 function App() {
 
@@ -44,7 +45,9 @@ function App() {
           path="/inquiry"
           element={
             user ? (
-              <InquiryForm user={user} setUser={setUser} />
+              <Layout user={user} onLogout={logout}>
+                <InquiryForm user={user} setUser={setUser} />
+              </Layout>
             ) : (
               <Navigate to="/login" />
             )
@@ -56,7 +59,9 @@ function App() {
           path="/order"
           element={
             user ? (
-              <OrderForm user={user} setUser={setUser} />
+              <Layout user={user} onLogout={logout}>
+                <OrderForm user={user} setUser={setUser} />
+              </Layout>
             ) : (
               <Navigate to="/login" />
             )

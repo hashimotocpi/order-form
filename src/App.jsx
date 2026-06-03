@@ -1,25 +1,81 @@
 import { useState } from "react";
-import Login from "./components/Login";
-import InquiryForm from "./components/InquiryForm";
-import OrderForm from "./components/OrderForm";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
-export default function App() {
-  const [user, setUser] = useState(null);
-  const [page, setPage] = useState("inquiry");
+import Login from "./pages/Login";
+import InquiryForm from "./pages/InquiryForm";
+import OrderForm from "./pages/OrderForm";
 
-  if (!user) return <Login setUser={setUser} />;
+function App() {
+
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem("user");
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+  };
 
   return (
-    <div>
-      <div>
-        <button onClick={() => setPage("inquiry")}>問い合わせ</button>
-        <button onClick={() => setPage("order")}>発注</button>
-      </div>
+    <BrowserRouter>
 
-      <p>{user.companyName}</p>
+      {!user ? (
+        <Routes>
 
-      {page === "inquiry" && <InquiryForm user={user} />}
-      {page === "order" && <OrderForm user={user} />}
-    </div>
+          <Route
+            path="/login"
+            element={
+              <Login
+                setUser={setUser}
+              />
+            }
+          />
+
+          <Route
+            path="*"
+            element={<Navigate to="/login" />}
+          />
+
+        </Routes>
+      ) : (
+        <Routes>
+
+          <Route
+            path="/inquiry"
+            element={
+              <InquiryForm
+                user={user}
+                onLogout={logout}
+              />
+            }
+          />
+
+          <Route
+            path="/order"
+            element={
+              <OrderForm
+                user={user}
+                onLogout={logout}
+              />
+            }
+          />
+
+          <Route
+            path="*"
+            element={<Navigate to="/inquiry" />}
+          />
+
+        </Routes>
+      )}
+
+    </BrowserRouter>
   );
 }
+
+export default App;

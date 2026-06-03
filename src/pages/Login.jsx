@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const GAS_URL =
   "https://script.google.com/macros/s/AKfycbzCqMsJEEiIcBZA8I_2MnGNb39PiWGaic-eAcMTHDdRiytWru_gTew3XOR_XAbgyVMHDg/exec";
@@ -41,6 +42,8 @@ export default function Login({ setUser }) {
           companyCode: data.companyCode,
           companyName: data.companyName,
         });
+
+        navigate("/home"); 
   
       } else {
   

@@ -31,10 +31,16 @@ export default function Login({ setUser }) {
   
         localStorage.setItem(
           "user",
-          JSON.stringify(data)
+          JSON.stringify({
+            companyCode: data.companyCode,
+            companyName: data.companyName,
+          })
         );
   
-        setUser(data);
+        setUser({
+          companyCode: data.companyCode,
+          companyName: data.companyName,
+        });
   
       } else {
   

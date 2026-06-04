@@ -45,9 +45,9 @@ function App() {
           path="/inquiry"
           element={
             user ? (
-              <Layout user={user} onLogout={logout}>
+              
                 <InquiryForm user={user} setUser={setUser} />
-              </Layout>
+              
             ) : (
               <Navigate to="/login" />
             )
@@ -59,9 +59,9 @@ function App() {
           path="/order"
           element={
             user ? (
-              <Layout user={user} onLogout={logout}>
+              
                 <OrderForm user={user} setUser={setUser} />
-              </Layout>
+              
             ) : (
               <Navigate to="/login" />
             )

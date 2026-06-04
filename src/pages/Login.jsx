@@ -9,57 +9,58 @@ export default function Login({ setUser }) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const navigate = useNavigate(); // ★これ必要
+
   const handleLogin = async () => {
     try {
       setLoading(true);
-  
+
       const formData = new FormData();
-  
+
       formData.append("action", "login");
       formData.append("companyCode", companyCode);
       formData.append("password", password);
-  
+
       const res = await fetch(GAS_URL, {
         method: "POST",
         body: formData,
       });
-  
+
       const data = await res.json();
-  
+
       console.log("LOGIN RESULT", data);
-  
+
       if (data.success) {
-  
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            companyCode: data.companyCode,
-            companyName: data.companyName,
-          })
-        );
-  
+
+        localStorage.setItem("user", JSON.stringify({
+          companyCode: data.companyCode,
+          companyName: data.companyName,
+        }));
+
+        localStorage.setItem("lastActivity", Date.now());
+
         setUser({
           companyCode: data.companyCode,
           companyName: data.companyName,
         });
 
-        navigate("/home"); 
-  
+        navigate("/inquiry"); // ★ここOK
+
       } else {
-  
+
         alert(data.message || "ログインに失敗しました");
-  
+
       }
-  
+
     } catch (err) {
-  
+
       console.error(err);
       alert("通信エラー");
-  
+
     } finally {
-  
+
       setLoading(false);
-  
+
     }
   };
 
@@ -104,13 +105,11 @@ export default function Login({ setUser }) {
           </tbody>
         </table>
 
-        <div
-          style={{
-            marginTop: "20px",
-            color: "#fff",
-            lineHeight: "1.8",
-          }}
-        >
+        <div style={{
+          marginTop: "20px",
+          color: "#fff",
+          lineHeight: "1.8",
+        }}>
           会員登録済みのお客様は、
           会社コードとパスワードを入力して
           ログインしてください。

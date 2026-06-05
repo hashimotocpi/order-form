@@ -77,6 +77,11 @@ export default function OrderForm({ user }) {
       );
   
       const priceData = await res2.json();
+
+      const inquiry = await api.getInquiry(form.inquiryId);
+
+console.log("問い合わせ取得結果");
+console.log(JSON.stringify(inquiry, null, 2));
   
       console.log("価格結果:", priceData);
   

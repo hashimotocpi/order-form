@@ -75,20 +75,22 @@ if (!inquiry.success) {
   
       // ② 価格取得（ここ重要）
       const res2 = await fetch(
-        `${api.baseUrl}?type=getPrice&partNumber=${inquiry.partNumber}`
+        `${api.baseUrl}?type=getPrice&partNumber=${inquiry.manageCode}`
       );
       const priceData = await res2.json();
   
       setForm((prev) => ({
         ...prev,
         companyCode: inquiry.companyCode || "",
-        companyName: inquiry.companyName || "",
-        productName: inquiry.productName || "",
-        partNumber: inquiry.partNumber || "",
-  
-        chassisNo: inquiry.chassisNo || "",
-        modelCode: inquiry.modelCode || "",
-        classCode: inquiry.classCode || "",
+          companyName: inquiry.companyName || "",
+          productName: inquiry.productName || "",
+
+          partNumber: inquiry.partNumber || "",
+          manageCode: inquiry.manageCode || "",
+
+          chassisNo: inquiry.chassisNo || "",
+          modelCode: inquiry.modelCode || "",
+          classCode: inquiry.classCode || "",
   
         unitPrice: Number(priceData?.price || 0),
       }));

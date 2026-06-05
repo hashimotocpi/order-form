@@ -1,92 +1,154 @@
 import { useState, useEffect } from "react";
-
-const GAS_URL =
-  "https://script.google.com/macros/s/XXXX/exec"; // ←あなたのGAS URLに差し替え
+import Layout from "../components/Layout";
+import Section from "../components/Section";
+import FormTable from "../components/FormTable";
+import FormRow from "../components/FormRow";
+import { api } from "../api/api";
 
 export default function OrderForm({ user }) {
+  const [confirm, setConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const [form, setForm] = useState({
     inquiryId: "",
+
     companyCode: "",
     companyName: "",
     productName: "",
     partNumber: "",
+
+    unitPrice: 0,
     quantity: 1,
     totalPrice: 0,
+
     chassisNo: "",
     modelCode: "",
     classCode: "",
+
     phone: "",
+
     addressType: "company",
     address: "",
+
     deliveryDateType: "fast",
     deliveryDate: "",
+
     memo: "",
     agree: false,
   });
 
-  const [confirm, setConfirm] = useState(false);
-
   // =========================
-  // inquiryId → 自動取得API想定
+  // 共通入力処理
   // =========================
-  useEffect(() => {
-    if (!form.inquiryId) return;
-
-    const fetchData = async () => {
-      try {
-        const res = await fetch(`${GAS_URL}?type=getInquiry&inquiryId=${form.inquiryId}`);
-        const data = await res.json();
-
-        setForm((p) => ({
-          ...p,
-          companyCode: data.companyCode || "",
-          companyName: data.companyName || "",
-          productName: data.productName || "",
-          partNumber: data.partNumber || "",
-          chassisNo: data.chassisNo || "",
-          modelCode: data.modelCode || "",
-          classCode: data.classCode || "",
-        }));
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    fetchData();
-  }, [form.inquiryId]);
-
-  // =========================
-  // 金額計算（仮単価あり想定）
-  // =========================
-  const unitPriceMap = {
-    default: 10000, // 後でスプレッドシート連携可能
-  };
-
-  useEffect(() => {
-    const unit = unitPriceMap[form.partNumber] || unitPriceMap.default;
-    const total = unit * Number(form.quantity || 0);
-
-    setForm((p) => ({ ...p, totalPrice: total }));
-  }, [form.partNumber, form.quantity]);
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setForm((p) => ({
-      ...p,
+
+    setForm((prev) => ({
+      ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
 
-  const submitOrder = async () => {
-    await fetch(GAS_URL, {
-      method: "POST",
-      body: JSON.stringify({
-        ...form,
-        userEmail: user?.email,
-      }),
-    });
+  // =========================
+  // 問い合わせ取得（手動）
+  // =========================
+  const fetchInquiry = async () => {
+    if (!form.inquiryId) {
+      alert("問い合わせIDを入力してください");
+      return;
+    }
+  
+    try {
+      // ① 問い合わせ取得
+      const res1 = await fetch(
+        `${api.baseUrl}?type=getInquiry&inquiryId=${form.inquiryId}`
+      );
+      const inquiry = await res1.json();
+  
+      if (!inquiry) {
+        alert("問い合わせが見つかりません");
+        return;
+      }
+  
+      // ② 価格取得（ここ重要）
+      const res2 = await fetch(
+        `${api.baseUrl}?type=getPrice&partNumber=${inquiry.partNumber}`
+      );
+      const priceData = await res2.json();
+  
+      setForm((prev) => ({
+        ...prev,
+        companyCode: inquiry.companyCode || "",
+        companyName: inquiry.companyName || "",
+        productName: inquiry.productName || "",
+        partNumber: inquiry.partNumber || "",
+  
+        chassisNo: inquiry.chassisNo || "",
+        modelCode: inquiry.modelCode || "",
+        classCode: inquiry.classCode || "",
+  
+        unitPrice: Number(priceData?.price || 0),
+      }));
+    } catch (err) {
+      console.error(err);
+      alert("問い合わせ取得失敗");
+    }
+  };
 
-    alert("発注完了しました");
+  // =========================
+  // 金額計算
+  // =========================
+  useEffect(() => {
+    const total =
+      Number(form.quantity || 0) *
+      Number(form.unitPrice || 0);
+  
+    setForm((prev) => ({
+      ...prev,
+      totalPrice: total,
+    }));
+  }, [form.quantity, form.unitPrice]);
+
+  // =========================
+  // 発注処理
+  // =========================
+  const submitOrder = async () => {
+    if (!form.agree) {
+      alert("利用規約に同意してください");
+      return;
+    }
+
+    if (loading) return;
+
+    setLoading(true);
+
+    try {
+      const res = await fetch(api.baseUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: "order",
+          ...form,
+          email: user?.email,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert("発注完了しました");
+        setConfirm(false);
+      } else {
+        alert("発注失敗");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("通信エラー");
+    }
+
+    setLoading(false);
   };
 
   // =========================
@@ -94,84 +156,175 @@ export default function OrderForm({ user }) {
   // =========================
   if (confirm) {
     return (
-      <div style={{ padding: 20 }}>
-        <h2>発注内容確認</h2>
+      <Layout user={user}>
+        <Section title="発注内容確認">
+          <FormTable>
+            <FormRow label="問い合わせID">{form.inquiryId}</FormRow>
+            <FormRow label="会社名">{form.companyName}</FormRow>
+            <FormRow label="商品名">{form.productName}</FormRow>
+            <FormRow label="品番">{form.partNumber}</FormRow>
 
-        <pre>{JSON.stringify(form, null, 2)}</pre>
+            <FormRow label="数量">{form.quantity}</FormRow>
 
-        <button onClick={() => setConfirm(false)}>戻る</button>
-        <button onClick={submitOrder}>発注する</button>
-      </div>
+            <FormRow label="合計金額">
+              {form.totalPrice.toLocaleString()} 円
+            </FormRow>
+
+            <FormRow label="配送先">
+              {form.addressType === "company"
+                ? "登録住所"
+                : form.address}
+            </FormRow>
+
+            <FormRow label="備考">{form.memo}</FormRow>
+          </FormTable>
+
+          <div className="button-area">
+            <button onClick={() => setConfirm(false)}>
+              戻る
+            </button>
+
+            <button onClick={submitOrder} disabled={loading}>
+              {loading ? "送信中..." : "発注確定"}
+            </button>
+          </div>
+        </Section>
+      </Layout>
     );
   }
 
+  // =========================
+  // 入力画面
+  // =========================
   return (
-    <div style={{ padding: 20, maxWidth: 700 }}>
-      <h2>発注フォーム</h2>
+    <Layout user={user}>
+      <Section title="発注フォーム">
+        <FormTable>
 
-      <input placeholder="問い合わせID" name="inquiryId" onChange={handleChange} />
+          {/* 問い合わせID */}
+          <FormRow label="問い合わせID" required>
+  <div style={{ display: "flex", gap: "8px" }}>
+    <input
+      name="inquiryId"
+      value={form.inquiryId}
+      onChange={handleChange}
+    />
 
-      <input placeholder="会社コード" name="companyCode" value={form.companyCode} readOnly />
-      <input placeholder="会社名" name="companyName" value={form.companyName} readOnly />
+    <button
+      type="button"
+      onClick={fetchInquiry}
+    >
+      取得
+    </button>
+  </div>
+</FormRow>
 
-      <input placeholder="商品名" name="productName" value={form.productName} readOnly />
-      <input placeholder="純正品番" name="partNumber" value={form.partNumber} readOnly />
+          <FormRow label="会社コード">
+            <input value={form.companyCode} readOnly />
+          </FormRow>
 
-      <input
-        placeholder="数量（必須）"
-        name="quantity"
-        type="number"
-        onChange={handleChange}
-      />
+          <FormRow label="会社名">
+            <input value={form.companyName} readOnly />
+          </FormRow>
 
-      <div>合計金額：{form.totalPrice.toLocaleString()}円</div>
+          <FormRow label="商品名">
+            <input value={form.productName} readOnly />
+          </FormRow>
 
-      <input placeholder="車台番号" name="chassisNo" value={form.chassisNo} readOnly />
-      <input placeholder="型式指定番号" name="modelCode" value={form.modelCode} readOnly />
-      <input placeholder="類別区分番号" name="classCode" value={form.classCode} readOnly />
+          <FormRow label="純正品番">
+            <input value={form.partNumber} readOnly />
+          </FormRow>
 
-      <input placeholder="電話番号" name="phone" onChange={handleChange} />
+          {/* 数量 */}
+          <FormRow label="数量" required>
+            <input
+              type="number"
+              name="quantity"
+              value={form.quantity}
+              onChange={handleChange}
+            />
+          </FormRow>
 
-      {/* 住所選択 */}
-      <select name="addressType" onChange={handleChange}>
-        <option value="company">御社直送（自動）</option>
-        <option value="custom">指定直送先</option>
-      </select>
+          <FormRow label="合計金額">
+            {form.totalPrice.toLocaleString()} 円
+          </FormRow>
 
-      {form.addressType === "custom" && (
-        <input
-          placeholder="お届け先住所"
-          name="address"
-          onChange={handleChange}
-        />
-      )}
+          {/* 車両 */}
+          <FormRow label="車台番号">
+            <input value={form.chassisNo} readOnly />
+          </FormRow>
 
-      <select name="deliveryDateType" onChange={handleChange}>
-        <option value="fast">最短</option>
-        <option value="指定">日時指定</option>
-      </select>
+          <FormRow label="型式指定番号">
+            <input value={form.modelCode} readOnly />
+          </FormRow>
 
-      {form.deliveryDateType === "指定" && (
-        <input type="date" name="deliveryDate" onChange={handleChange} />
-      )}
+          <FormRow label="類別区分番号">
+            <input value={form.classCode} readOnly />
+          </FormRow>
 
-      <textarea placeholder="備考" name="memo" onChange={handleChange} />
+          {/* 電話 */}
+          <FormRow label="電話番号">
+            <input
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+            />
+          </FormRow>
 
-      <h4>注意事項</h4>
-      <p style={{ fontSize: 12 }}>
-        ・返品はキャンセル料50%  
-        ・互換品の場合あり  
-        ・保証は規約通り  
-      </p>
+          {/* 配送先 */}
+          <FormRow label="配送先">
+            <select
+              name="addressType"
+              value={form.addressType}
+              onChange={handleChange}
+            >
+              <option value="company">登録住所へ配送</option>
+              <option value="custom">別住所へ配送</option>
+            </select>
 
-      <label>
-        <input type="checkbox" name="agree" onChange={handleChange} />
-        同意する
-      </label>
+            {form.addressType === "custom" && (
+              <input
+                name="address"
+                value={form.address}
+                onChange={handleChange}
+                placeholder="配送先住所"
+              />
+            )}
+          </FormRow>
 
-      <button disabled={!form.agree} onClick={() => setConfirm(true)}>
-        発注内容確認へ
-      </button>
-    </div>
+          {/* 備考 */}
+          <FormRow label="備考">
+            <textarea
+              name="memo"
+              value={form.memo}
+              onChange={handleChange}
+            />
+          </FormRow>
+
+          {/* 同意 */}
+          <FormRow label="同意">
+            <label>
+              <input
+                type="checkbox"
+                name="agree"
+                checked={form.agree}
+                onChange={handleChange}
+              />
+              利用規約に同意する
+            </label>
+          </FormRow>
+
+        </FormTable>
+
+        <div className="button-area">
+          <button
+            disabled={!form.agree}
+            onClick={() => setConfirm(true)}
+          >
+            確認へ進む
+          </button>
+        </div>
+      </Section>
+    </Layout>
   );
 }

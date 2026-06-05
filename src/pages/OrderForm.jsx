@@ -109,6 +109,31 @@ export default function OrderForm({ user }) {
   // =========================
   
   useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!form.partNumber) return;
+  
+      const fetchPrice = async () => {
+        try {
+          const res = await fetch(
+            `${api.baseUrl}?type=getPrice&partNumber=${form.partNumber}`
+          );
+  
+          const data = await res.json();
+  
+          setForm((prev) => ({
+            ...prev,
+            unitPrice: Number(data.price || 0),
+          }));
+        } catch (err) {
+          console.error(err);
+        }
+      };
+  
+      fetchPrice();
+    }, 200);
+  
+    return () => clearTimeout(timer);
+  }, [form.partNumber]);useEffect(() => {
     const fetchPrice = async () => {
       if (!form.partNumber) return;
   

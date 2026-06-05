@@ -76,14 +76,12 @@ export default function OrderForm({ user }) {
         return;
       }
 
-      const res2 = await fetch(
-        `${api.baseUrl}?type=getPrice&partNumber=${inquiry.partNumber}`
-      );
       
-      const priceData = await res2.json();
       
-      console.log("価格結果:", priceData);
-      
+      console.log("setForm実行前");
+      console.log(inquiry);
+      console.log(priceData);
+
       setForm((prev) => ({
         ...prev,
       
@@ -95,8 +93,7 @@ export default function OrderForm({ user }) {
         chassisNo: inquiry.chassisNo || "",
         modelCode: inquiry.modelCode || "",
         classCode: inquiry.classCode || "",
-      
-        unitPrice: Number(priceData?.price || 0),
+          
       }));
   
       
@@ -112,6 +109,30 @@ export default function OrderForm({ user }) {
   // =========================
   // 金額計算
   // =========================
+  
+  useEffect(() => {
+    const fetchPrice = async () => {
+      if (!form.partNumber) return;
+  
+      try {
+        const res = await fetch(
+          `${api.baseUrl}?type=getPrice&partNumber=${form.partNumber}`
+        );
+  
+        const data = await res.json();
+  
+        setForm((prev) => ({
+          ...prev,
+          unitPrice: Number(data.price || 0),
+        }));
+      } catch (err) {
+        console.error(err);
+      }
+    };
+  
+    fetchPrice();
+  }, [form.partNumber]);
+  
   useEffect(() => {
     const total =
       Number(form.quantity || 0) *
@@ -233,9 +254,13 @@ export default function OrderForm({ user }) {
   </div>
 </FormRow>
 
-          <FormRow label="会社コード">
-            <input value={form.companyCode} readOnly />
-          </FormRow>
+<FormRow label="会社コード">
+  <input
+    name="companyCode"
+    value={form.companyCode}
+    readOnly
+  />
+</FormRow>
 
           <FormRow label="会社名">
             <input value={form.companyName} readOnly />

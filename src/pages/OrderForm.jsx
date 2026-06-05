@@ -53,25 +53,38 @@ export default function OrderForm({ user }) {
   // 問い合わせ取得（手動）
   // =========================
   const fetchInquiry = async () => {
-    if (!form.inquiryId) {
-      alert("問い合わせIDを入力してください");
-      return;
-    }
-  
     try {
-      // ① 問い合わせ取得
+      console.log("問い合わせID:", form.inquiryId);
+  
       const res = await fetch(
         `${api.baseUrl}?type=getInquiry&inquiryId=${form.inquiryId}`
       );
-      
+  
+      console.log("status:", res.status);
+  
       const inquiry = await res.json();
-
-console.log("問い合わせ取得結果:", inquiry);
-
-if (!inquiry.success) {
-  alert("問い合わせが見つかりません");
-  return;
-}
+  
+      console.log("問い合わせ結果:", inquiry);
+  
+      if (!inquiry.success) {
+        alert("問い合わせが見つかりません");
+        return;
+      }
+  
+      // ↓ここから価格取得
+      const res2 = await fetch(
+        `${api.baseUrl}?type=getPrice&partNumber=${inquiry.manageCode}`
+      );
+  
+      const priceData = await res2.json();
+  
+      console.log("価格結果:", priceData);
+  
+    } catch (err) {
+      console.error("fetchInquiry error:", err);
+      alert("問い合わせ取得失敗");
+    }
+  };
   
       // ② 価格取得（ここ重要）
       const res2 = await fetch(

@@ -69,14 +69,37 @@ export default function OrderForm({ user }) {
   
 
       console.log("問い合わせ結果", inquiry);
-      console.log("manageCode", inquiry.manageCode);
+      
       console.log("partNumber", inquiry.partNumber);
       if (!inquiry.success) {
         alert("問い合わせが見つかりません");
         return;
       }
+
+      const res2 = await fetch(
+        `${api.baseUrl}?type=getPrice&partNumber=${inquiry.partNumber}`
+      );
+      
+      const priceData = await res2.json();
+      
+      console.log("価格結果:", priceData);
+      
+      setForm((prev) => ({
+        ...prev,
+      
+        companyCode: inquiry.companyCode || "",
+        companyName: inquiry.companyName || "",
+        productName: inquiry.productName || "",
+        partNumber: inquiry.partNumber || "",
+      
+        chassisNo: inquiry.chassisNo || "",
+        modelCode: inquiry.modelCode || "",
+        classCode: inquiry.classCode || "",
+      
+        unitPrice: Number(priceData?.price || 0),
+      }));
   
-      console.log("manageCode =", inquiry.manageCode);
+      
   
       
   

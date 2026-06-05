@@ -75,13 +75,11 @@ export default function OrderForm({ user }) {
         alert("問い合わせが見つかりません");
         return;
       }
-
-      
+     
       
       console.log("setForm実行前");
       console.log(inquiry);
-      console.log(priceData);
-
+      
       setForm((prev) => ({
         ...prev,
       

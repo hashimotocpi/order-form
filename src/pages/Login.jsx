@@ -25,12 +25,10 @@ export default function Login({ setUser }) {
         method: "POST",
         body: formData,
       });
-      
-      const text = await res.text();
-      console.log("RAW RESPONSE:", text);
-      
-      // 一旦ここで止める
-      return;
+
+      const data = await res.json();
+
+      console.log("LOGIN RESULT", data);
 
       if (data.success) {
 

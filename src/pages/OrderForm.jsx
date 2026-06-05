@@ -68,7 +68,7 @@ export default function OrderForm({ user }) {
 
 console.log("問い合わせ取得結果:", inquiry);
 
-if (!inquiry || inquiry.success === false) {
+if (!inquiry.success) {
   alert("問い合わせが見つかりません");
   return;
 }

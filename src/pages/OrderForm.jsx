@@ -60,15 +60,18 @@ export default function OrderForm({ user }) {
   
     try {
       // ① 問い合わせ取得
-      const res1 = await fetch(
+      const res = await fetch(
         `${api.baseUrl}?type=getInquiry&inquiryId=${form.inquiryId}`
       );
-      const inquiry = await res1.json();
-  
-      if (!inquiry) {
-        alert("問い合わせが見つかりません");
-        return;
-      }
+      
+      const inquiry = await res.json();
+
+console.log("問い合わせ取得結果:", inquiry);
+
+if (!inquiry || inquiry.success === false) {
+  alert("問い合わせが見つかりません");
+  return;
+}
   
       // ② 価格取得（ここ重要）
       const res2 = await fetch(

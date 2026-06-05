@@ -4,7 +4,7 @@ const GAS_URL =
 // =========================
 // ① 問い合わせ取得（GET）
 // =========================
-export const getInquiry = async (inquiryId) => {
+export const getInquiry = async (inquiryId) => {  
   try {
     const url = new URL(GAS_URL);
     url.searchParams.set("type", "getInquiry");
@@ -49,6 +49,8 @@ export const createOrder = async (form, user) => {
 // ③ まとめてexport（任意）
 // =========================
 export const api = {
+  baseUrl:
+    "https://script.google.com/macros/s/AKfycbw_H4qpReLYRlcVQFJADRcJEhlurUYNUnnc-Toi0gLaezAo38J1CDng7LeM1s7dqajY/exec",
   getInquiry,
   createOrder,
 };

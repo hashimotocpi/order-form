@@ -64,7 +64,13 @@ export default function OrderForm({ user }) {
   
       console.log("問い合わせ結果:", inquiry);
       console.log(JSON.stringify(inquiry, null, 2));
+
+      alert(JSON.stringify(inquiry));
   
+
+      console.log("問い合わせ結果", inquiry);
+      console.log("manageCode", inquiry.manageCode);
+      console.log("partNumber", inquiry.partNumber);
       if (!inquiry.success) {
         alert("問い合わせが見つかりません");
         return;

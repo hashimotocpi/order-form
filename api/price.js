@@ -1,4 +1,4 @@
-import { callGAS } from "../../lib/gas";
+import { callGAS } from "../lib/gas";
 
 export default async function handler(req, res) {
   try {

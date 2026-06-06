@@ -1,14 +1,12 @@
-import { callGAS } from "../../lib/gas";
+import { callGAS } from "../lib/gas";
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
-
   try {
+    const { inquiryId } = req.query;
+
     const data = await callGAS({
-      type: "order",
-      ...req.body,
+      type: "getInquiry",
+      inquiryId,
     });
 
     return res.status(200).json(data);

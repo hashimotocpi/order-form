@@ -3,25 +3,25 @@ import fs from "fs";
 console.log("LIB CHECK:", fs.existsSync("./lib/gas.js"));
 
 
+import fs from "fs";
+
+console.log("LIB CHECK:", fs.existsSync("./lib/gas.js"));
+
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
+  if (req.method !== "GET") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const body =
-      typeof req.body === "string"
-        ? JSON.parse(req.body)
-        : req.body || {};
+    const { inquiryId } = req.query;
 
-        console.log("🔥 FRONT DATA:", body);
+    console.log("🔥 INQUIRY ID:", inquiryId);
 
-    // 🔥 ここを変更（絶対パス解決に寄せる）
     const { callGAS } = await import("../lib/gas.js");
 
     const data = await callGAS({
-      type: "order",
-      ...body,
+      type: "getInquiry",
+      inquiryId,
     });
 
     console.log("🔥 GAS RESPONSE:", data);
@@ -32,7 +32,7 @@ export default async function handler(req, res) {
     });
 
   } catch (err) {
-    console.error("❌ ORDER API ERROR:", err);
+    console.error("❌ INQUIRY API ERROR:", err);
 
     return res.status(500).json({
       success: false,

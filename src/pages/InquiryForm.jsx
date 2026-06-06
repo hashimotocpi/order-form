@@ -77,12 +77,12 @@ export default function InquiryForm({ user, setUser }) {
         images: imageData,
       };
   
-      const formData = new FormData();
-      formData.append("data", JSON.stringify(payload));
-  
-      const res = await fetch("/api/inquiry", {
+      const res = await fetch("/api/createInquiry", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
       });
       
       const data = await res.json();
@@ -94,6 +94,8 @@ export default function InquiryForm({ user, setUser }) {
       } else {
         alert("送信失敗");
       }
+      
+      
   
     } catch (err) {
       console.error(err);

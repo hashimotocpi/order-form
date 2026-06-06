@@ -14,6 +14,8 @@ export default async function handler(req, res) {
         ? JSON.parse(req.body)
         : req.body || {};
 
+        console.log("🔥 FRONT DATA:", body);
+
     // 🔥 ここを変更（絶対パス解決に寄せる）
     const { callGAS } = await import("../lib/gas.js");
 

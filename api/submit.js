@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   
     try {
       const GAS_URL =
-        "https://script.google.com/macros/s/XXXXXXXX/exec";
+        "https://script.google.com/macros/s/AKfycbxtkmbZ8W_4xbsBkkdpjk4JT4JfHWfdXXGvHu7GwDowpBOSRJ5JX-qmLvEuI82kXH2n/exec";
   
       const response = await fetch(GAS_URL, {
         method: "POST",

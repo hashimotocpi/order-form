@@ -48,54 +48,53 @@ export default function OrderForm({ user }) {
   };
 
   // =========================
-  // 問い合わせ取得（手動）
-  // =========================
-  const fetchInquiry = async () => {
-    try {
-      console.log("問い合わせID:", form.inquiryId);
-  
-      const res = await fetch(
-        `/api/inquiry?inquiryId=${form.inquiryId}`
-      );
-  
-      const inquiry = await res.json();
-  
-      console.log("問い合わせ結果:", inquiry);
-      console.log(JSON.stringify(inquiry, null, 2));
-     
+// 問い合わせ取得（手動）
+// =========================
+const fetchInquiry = async () => {
+  try {
+    console.log("問い合わせID:", form.inquiryId);
 
-      console.log("問い合わせ結果", inquiry);
-      
-      
-      if (!inquiry.success) {
-        alert("問い合わせが見つかりません");
-        return;
-      }
-                
-       
-      setForm((prev) => ({
-        ...prev,
-      
-        companyCode: inquiry.companyCode || "",
-        companyName: inquiry.companyName || "",
-        productName: inquiry.productName || "",
-        partNumber: inquiry.partNumber || "",
-      
-        chassisNo: inquiry.chassisNo || "",
-        modelCode: inquiry.modelCode || "",
-        classCode: inquiry.classCode || "",
-          
-      }));
-  
-      
-  
-      
-  
-    } catch (err) {
-      console.error("fetchInquiry error:", err);
-      alert("問い合わせ取得失敗");
+    const res = await fetch(
+      `/api/inquiry?inquiryId=${encodeURIComponent(form.inquiryId)}`
+    );
+
+    console.log("status", res.status);
+
+    const text = await res.text();
+
+    console.log("response text:", text);
+
+    let inquiry;
+
+    try {
+      inquiry = JSON.parse(text);
+    } catch {
+      console.error("JSONではありません");
+      return;
     }
-  };
+
+    console.log("問い合わせ結果:", inquiry);
+
+    if (!inquiry.success) {
+      alert("問い合わせが見つかりません");
+      return;
+    }
+
+    setForm((prev) => ({
+      ...prev,
+      companyCode: inquiry.companyCode || "",
+      companyName: inquiry.companyName || "",
+      productName: inquiry.productName || "",
+      partNumber: inquiry.partNumber || "",
+      chassisNo: inquiry.chassisNo || "",
+      modelCode: inquiry.modelCode || "",
+      classCode: inquiry.classCode || "",
+    }));
+  } catch (err) {
+    console.error("fetchInquiry error:", err);
+    alert("問い合わせ取得失敗");
+  }
+};
 
   // =========================
   // 金額計算

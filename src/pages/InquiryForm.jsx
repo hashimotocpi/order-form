@@ -80,19 +80,15 @@ export default function InquiryForm({ user, setUser }) {
       const formData = new FormData();
       formData.append("data", JSON.stringify(payload));
   
-      const res = await fetch(
-        "https://script.google.com/macros/s/AKfycbxtkmbZ8W_4xbsBkkdpjk4JT4JfHWfdXXGvHu7GwDowpBOSRJ5JX-qmLvEuI82kXH2n/exec",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-  
-      const text = await res.text();
-      console.log("GASレスポンス:", text);
-  
-      const data = JSON.parse(text);
-  
+      const res = await fetch("/api/inquiry", {
+        method: "POST",
+        body: formData,
+      });
+      
+      const data = await res.json();
+      
+      console.log("問い合わせ結果:", data);
+      
       if (data.success) {
         setIsSent(true);
       } else {

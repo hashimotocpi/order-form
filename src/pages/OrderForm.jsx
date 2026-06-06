@@ -3,7 +3,6 @@ import Layout from "../components/Layout";
 import Section from "../components/Section";
 import FormTable from "../components/FormTable";
 import FormRow from "../components/FormRow";
-import { api } from "../api/api";
 
 export default function OrderForm({ user }) {
   const [confirm, setConfirm] = useState(false);
@@ -19,8 +18,7 @@ export default function OrderForm({ user }) {
 
     unitPrice: 0,
     quantity: 1,
-    totalPrice: 0,
-
+  
     chassisNo: "",
     modelCode: "",
     classCode: "",
@@ -57,29 +55,24 @@ export default function OrderForm({ user }) {
       console.log("問い合わせID:", form.inquiryId);
   
       const res = await fetch(
-        `${api.baseUrl}?type=getInquiry&inquiryId=${form.inquiryId}`
+        `/api/inquiry?inquiryId=${form.inquiryId}`
       );
   
       const inquiry = await res.json();
   
       console.log("問い合わせ結果:", inquiry);
       console.log(JSON.stringify(inquiry, null, 2));
-
-      alert(JSON.stringify(inquiry));
-  
+     
 
       console.log("問い合わせ結果", inquiry);
       
-      console.log("partNumber", inquiry.partNumber);
+      
       if (!inquiry.success) {
         alert("問い合わせが見つかりません");
         return;
       }
-     
-      
-      console.log("setForm実行前");
-      console.log(inquiry);
-      
+                
+       
       setForm((prev) => ({
         ...prev,
       
@@ -115,11 +108,12 @@ export default function OrderForm({ user }) {
       const fetchPrice = async () => {
         try {
           const res = await fetch(
-            `${api.baseUrl}?type=getPrice&partNumber=${form.partNumber}`
+            `/api/price?partNumber=${form.partNumber}`
           );
-  
+
+                  
           const data = await res.json();
-  
+    
           setForm((prev) => ({
             ...prev,
             unitPrice: Number(data.price || 0),
@@ -133,39 +127,11 @@ export default function OrderForm({ user }) {
     }, 200);
   
     return () => clearTimeout(timer);
-  }, [form.partNumber]);useEffect(() => {
-    const fetchPrice = async () => {
-      if (!form.partNumber) return;
-  
-      try {
-        const res = await fetch(
-          `${api.baseUrl}?type=getPrice&partNumber=${form.partNumber}`
-        );
-  
-        const data = await res.json();
-  
-        setForm((prev) => ({
-          ...prev,
-          unitPrice: Number(data.price || 0),
-        }));
-      } catch (err) {
-        console.error(err);
-      }
-    };
-  
-    fetchPrice();
   }, [form.partNumber]);
   
-  useEffect(() => {
-    const total =
-      Number(form.quantity || 0) *
-      Number(form.unitPrice || 0);
-  
-    setForm((prev) => ({
-      ...prev,
-      totalPrice: total,
-    }));
-  }, [form.quantity, form.unitPrice]);
+  const totalPrice =
+  Number(form.quantity || 0) *
+  Number(form.unitPrice || 0); 
 
   // =========================
   // 発注処理
@@ -181,18 +147,18 @@ export default function OrderForm({ user }) {
     setLoading(true);
 
     try {
-      const res = await fetch(api.baseUrl, {
+      const res = await fetch("/api/order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          type: "order",
           ...form,
+          totalPrice,
           email: user?.email,
         }),
       });
-
+      
       const data = await res.json();
 
       if (data.success) {
@@ -225,7 +191,7 @@ export default function OrderForm({ user }) {
             <FormRow label="数量">{form.quantity}</FormRow>
 
             <FormRow label="合計金額">
-              {form.totalPrice.toLocaleString()} 円
+              {totalPrice.toLocaleString()} 円
             </FormRow>
 
             <FormRow label="配送先">
@@ -308,7 +274,7 @@ export default function OrderForm({ user }) {
           </FormRow>
 
           <FormRow label="合計金額">
-            {form.totalPrice.toLocaleString()} 円
+          {totalPrice.toLocaleString()} 円
           </FormRow>
 
           {/* 車両 */}

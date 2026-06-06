@@ -6,22 +6,42 @@ export default async function handler(req, res) {
   }
 
   try {
+    // bodyの安全化（ここ重要）
     const body =
       typeof req.body === "string"
         ? JSON.parse(req.body)
         : req.body || {};
 
+    console.log("📦 REQUEST BODY:", body);
+
+    // GAS呼び出し（唯一の通信ポイント）
     const data = await callGAS({
       type: "order",
       ...body,
     });
 
-    return res.status(200).json(data);
+    console.log("🔥 GAS RESPONSE:", data);
+
+    // GASレスポンスチェック
+    if (!data) {
+      throw new Error("GAS returned empty response");
+    }
+
+    if (typeof data !== "object") {
+      throw new Error("GAS response is not JSON: " + data);
+    }
+
+    return res.status(200).json({
+      success: true,
+      data,
+    });
+
   } catch (err) {
-    console.error("ORDER API ERROR:", err);
+    console.error("❌ ORDER API ERROR:", err);
 
     return res.status(500).json({
-      error: err.message || err.toString(),
+      success: false,
+      error: err.message,
     });
   }
 }

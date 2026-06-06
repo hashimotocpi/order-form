@@ -87,7 +87,7 @@ export default function InquiryForm({ user, setUser }) {
       
       const data = await res.json();
       
-      console.log("問い合わせ結果:", data);
+      console.log(data);
       
       if (data.success) {
         setIsSent(true);

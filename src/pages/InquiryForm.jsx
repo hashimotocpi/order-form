@@ -62,6 +62,28 @@ export default function InquiryForm({ user, setUser }) {
     setImages([...e.target.files]);
   };
 
+  const sendInquiry = async (data) => {
+    console.log("① 送信開始");
+  
+    try {
+      const res = await fetch("/api/createInquiry", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+  
+      const result = await res.json();
+      console.log("③ API response:", result);
+  
+      return result;
+  
+    } catch (err) {
+      console.error("送信エラー:", err);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
   
@@ -77,25 +99,15 @@ export default function InquiryForm({ user, setUser }) {
         images: imageData,
       };
   
-      const res = await fetch("/api/createInquiry", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-      
-      const data = await res.json();
-      
-      console.log(data);
-      
-      if (data.success) {
+      const result = await sendInquiry(payload);
+  
+      console.log("結果:", result);
+  
+      if (result?.success) {
         setIsSent(true);
       } else {
         alert("送信失敗");
       }
-      
-      
   
     } catch (err) {
       console.error(err);

@@ -2,11 +2,6 @@ import fs from "fs";
 
 console.log("LIB CHECK:", fs.existsSync("./lib/gas.js"));
 
-
-import fs from "fs";
-
-console.log("LIB CHECK:", fs.existsSync("./lib/gas.js"));
-
 export default async function handler(req, res) {
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method not allowed" });

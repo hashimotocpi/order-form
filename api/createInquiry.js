@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     console.log("🔥 CREATE INQUIRY INPUT:", body);
 
     const response = await fetch(
-      "https://script.google.com/macros/s/AKfycbw_H4qpReLYRlcVQFJADRcJEhlurUYNUnnc-Toi0gLaezAo38J1CDng7LeM1s7dqajY/exec",
+      "https://script.google.com/macros/s/AKfycbxtkmbZ8W_4xbsBkkdpjk4JT4JfHWfdXXGvHu7GwDowpBOSRJ5JX-qmLvEuI82kXH2n/exec",
       {
         method: "POST",
         headers: {

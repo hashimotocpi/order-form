@@ -14,9 +14,15 @@ export default async function handler(req, res) {
       `?type=getInquiry&inquiryId=${encodeURIComponent(inquiryId)}`;
 
     const response = await fetch(url);
-    const data = await response.json();
 
-    return res.status(200).json(data);
+    const text = await response.text();
+
+    console.log("RAW GAS:", text);
+
+    return res.status(200).json({
+      success: true,
+      raw: text
+    });
 
   } catch (err) {
     return res.status(500).json({

@@ -19,13 +19,12 @@ export default async function handler(req, res) {
 
     console.log("RAW GAS:", text);
 
-    return res.status(200).json({
-      success: true,
-      raw: text,
-    });
+    const data = JSON.parse(text);
+
+    return res.status(200).json(data);
 
   } catch (err) {
-    console.error(err);
+    console.error("INQUIRY ERROR:", err);
 
     return res.status(500).json({
       success: false,

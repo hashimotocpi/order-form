@@ -22,13 +22,14 @@ export default async function handler(req, res) {
       }
     );
 
-    const data = await response.json();
+    const text = await response.text();
 
-    console.log("🔥 GAS RESPONSE:", data);
+    console.log("🔥 RAW GAS RESPONSE:");
+    console.log(text);
 
     return res.status(200).json({
       success: true,
-      data,
+      gasResponse: text,
     });
 
   } catch (err) {

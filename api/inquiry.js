@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     if (!inquiryId) {
       return res.status(400).json({
         success: false,
-        error: "inquiryId is required"
+        error: "inquiryId is required",
       });
     }
 
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       success: true,
-      raw: text
+      raw: text,
     });
 
   } catch (err) {
@@ -29,7 +29,7 @@ export default async function handler(req, res) {
 
     return res.status(500).json({
       success: false,
-      error: err.toString()
+      error: err.toString(),
     });
   }
 }

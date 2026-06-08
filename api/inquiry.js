@@ -19,14 +19,17 @@ export default async function handler(req, res) {
 
     console.log("RAW GAS:", text);
 
-    const data = JSON.parse(text);
-
-    return res.status(200).json(data);
+    return res.status(200).json({
+      success: true,
+      raw: text
+    });
 
   } catch (err) {
+    console.error(err);
+
     return res.status(500).json({
       success: false,
-      error: err.toString(),
+      error: err.toString()
     });
   }
 }

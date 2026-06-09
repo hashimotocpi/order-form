@@ -39,8 +39,14 @@ export default function OrderForm({ user }) {
   // 共通入力処理
   // =========================
   const handleChange = (e) => {
+    console.log(
+      "change:",
+      e.target.name,
+      e.target.value
+    );
+  
     const { name, value, type, checked } = e.target;
-
+  
     setForm((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,

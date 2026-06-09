@@ -81,8 +81,7 @@ const fetchInquiry = async () => {
       return;
     }
     
-    const data = inquiry.data;
-    
+       
     setForm((prev) => ({
       ...prev,
       companyCode: data.companyCode || "",

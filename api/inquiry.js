@@ -15,9 +15,13 @@ export default async function handler(req, res) {
 
     const response = await fetch(url);
 
+    console.log("STATUS:", response.status);
+    console.log("URL:", response.url);
+
     const text = await response.text();
 
-    console.log("RAW GAS:", text);
+    console.log("RAW GAS RESPONSE:");
+    console.log(text);
 
     const data = JSON.parse(text);
 

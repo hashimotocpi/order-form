@@ -259,7 +259,7 @@ const fetchInquiry = async () => {
 
           <FormRow label="会社名">
             <input
-             name="companyCode"
+             name="companyName"
              value={form.companyName} 
              onChange={handleChange} />
           </FormRow>

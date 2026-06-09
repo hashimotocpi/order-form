@@ -30,6 +30,7 @@ export default function OrderForm({ user }) {
 
     deliveryDateType: "fast",
     deliveryDate: "",
+    deliveryTime: "",
 
     memo: "",
     agree: false,
@@ -106,7 +107,17 @@ const fetchInquiry = async () => {
   // =========================
   // 金額計算
   // =========================
+  const getMinDate = () => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().split("T")[0];
+  };
   
+  const getMaxDate = () => {
+    const d = new Date();
+    d.setDate(d.getDate() + 7);
+    return d.toISOString().split("T")[0];
+  };
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!form.partNumber) return;
@@ -205,6 +216,16 @@ const fetchInquiry = async () => {
                 ? "登録住所"
                 : form.address}
             </FormRow>
+            
+            <FormRow label="お届け希望">
+             
+             {form.deliveryDateType === "fast"
+             
+               ? "最短"
+             
+               : `${form.deliveryDate} ${form.deliveryTime}`}
+            
+            </FormRow>
 
             <FormRow label="備考">{form.memo}</FormRow>
           </FormTable>
@@ -249,7 +270,7 @@ const fetchInquiry = async () => {
   </div>
 </FormRow>
 
-          <FormRow label="会社コード">
+          <FormRow label="会社コード"required>
             <input
               name="companyCode"
               value={form.companyCode}
@@ -343,6 +364,89 @@ const fetchInquiry = async () => {
               />
             )}
           </FormRow>
+
+          <FormRow label="お届け希望">
+  <div>
+    <label>
+      <input
+        type="radio"
+        name="deliveryDateType"
+        value="fast"
+        checked={form.deliveryDateType === "fast"}
+        onChange={handleChange}
+      />
+      最短
+    </label>
+
+    <label style={{ marginLeft: "20px" }}>
+      <input
+        type="radio"
+        name="deliveryDateType"
+        value="date"
+        checked={form.deliveryDateType === "date"}
+        onChange={handleChange}
+      />
+      日付指定
+    </label>
+  </div>
+
+  {form.deliveryDateType === "date" && (
+    <>
+      <div style={{ marginTop: "10px" }}>
+        <input
+          type="date"
+          name="deliveryDate"
+          value={form.deliveryDate}
+          min={getMinDate()}
+          max={getMaxDate()}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div style={{ marginTop: "10px" }}>
+        <select
+          name="deliveryTime"
+          value={form.deliveryTime}
+          onChange={handleChange}
+        >
+          <option value="">
+            時間帯を選択
+          </option>
+
+          <option value="午前中">
+            午前中
+          </option>
+
+          <option value="14-16">
+            14～16時
+          </option>
+
+          <option value="16-18">
+            16～18時
+          </option>
+
+          <option value="18-20">
+            18～20時
+          </option>
+
+          <option value="19-21">
+            19～21時
+          </option>
+        </select>
+      </div>
+    </>
+  )}
+
+  <div
+    style={{
+      marginTop: "10px",
+      color: "#666",
+      fontSize: "12px",
+    }}
+  >
+    ※ご希望に添えない場合がございます。
+  </div>
+</FormRow>
 
           {/* 備考 */}
           <FormRow label="備考">

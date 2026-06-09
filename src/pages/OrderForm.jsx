@@ -74,6 +74,7 @@ const fetchInquiry = async () => {
     }
 
     console.log("問い合わせ結果:", inquiry);
+    alert(JSON.stringify(inquiry));
 
     if (!inquiry.success) {
       alert("問い合わせが見つかりません");
@@ -146,7 +147,7 @@ const fetchInquiry = async () => {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/order", {
+      const res = await fetch("/api/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -81,16 +81,15 @@ const fetchInquiry = async () => {
       return;
     }
     
-       
     setForm((prev) => ({
       ...prev,
-      companyCode: data.companyCode || "",
-      companyName: data.companyName || "",
-      productName: data.productName || "",
-      partNumber: data.partNumber || "",
-      chassisNo: data.chassisNo || "",
-      modelCode: data.modelCode || "",
-      classCode: data.classCode || "",
+      companyCode: inquiry.companyCode || "",
+      companyName: inquiry.companyName || "",
+      productName: inquiry.productName || "",
+      partNumber: inquiry.partNumber || "",
+      chassisNo: inquiry.chassisNo || "",
+      modelCode: inquiry.modelCode || "",
+      classCode: inquiry.classCode || "",
     }));
   } catch (err) {
     console.error("fetchInquiry error:", err);

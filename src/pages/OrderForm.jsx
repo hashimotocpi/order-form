@@ -243,24 +243,33 @@ const fetchInquiry = async () => {
   </div>
 </FormRow>
 
-<FormRow label="会社コード">
-  <input
-    name="companyCode"
-    value={form.companyCode}
-    onChange={handleChange}
-  />
-</FormRow>
+          <FormRow label="会社コード">
+            <input
+              name="companyCode"
+              value={form.companyCode}
+              onChange={handleChange}
+            />
+          </FormRow>
 
           <FormRow label="会社名">
-            <input value={form.companyName} onChange={handleChange} />
+            <input
+             name="companyCode"
+             value={form.companyName} 
+             onChange={handleChange} />
           </FormRow>
 
           <FormRow label="商品名">
-            <input value={form.productName} onChange={handleChange} />
+            <input
+              name="productName"
+              value={form.productName}
+              onChange={handleChange} />
           </FormRow>
 
           <FormRow label="純正品番"required>
-            <input value={form.partNumber} onChange={handleChange} />
+            <input
+             name="partNumber"
+             value={form.partNumber}
+              onChange={handleChange} />
           </FormRow>
 
           {/* 数量 */}
@@ -279,15 +288,24 @@ const fetchInquiry = async () => {
 
           {/* 車両 */}
           <FormRow label="車台番号"required>
-            <input value={form.chassisNo} onChange={handleChange}/>
+            <input
+             name="chassisNo"
+             value={form.chassisNo}
+             onChange={handleChange}/>
           </FormRow>
 
           <FormRow label="型式指定番号">
-            <input value={form.modelCode} onChange={handleChange} />
+            <input
+             name="modelCode"
+             value={form.modelCode}
+              onChange={handleChange} />
           </FormRow>
 
           <FormRow label="類別区分番号">
-            <input value={form.classCode} onChange={handleChange}/>
+            <input
+             name="classCode"
+             value={form.classCode}
+              onChange={handleChange}/>
           </FormRow>
 
           {/* 電話 */}

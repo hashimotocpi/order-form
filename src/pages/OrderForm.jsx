@@ -80,16 +80,18 @@ const fetchInquiry = async () => {
       alert("問い合わせが見つかりません");
       return;
     }
-
+    
+    const data = inquiry.data;
+    
     setForm((prev) => ({
       ...prev,
-      companyCode: inquiry.companyCode || "",
-      companyName: inquiry.companyName || "",
-      productName: inquiry.productName || "",
-      partNumber: inquiry.partNumber || "",
-      chassisNo: inquiry.chassisNo || "",
-      modelCode: inquiry.modelCode || "",
-      classCode: inquiry.classCode || "",
+      companyCode: data.companyCode || "",
+      companyName: data.companyName || "",
+      productName: data.productName || "",
+      partNumber: data.partNumber || "",
+      chassisNo: data.chassisNo || "",
+      modelCode: data.modelCode || "",
+      classCode: data.classCode || "",
     }));
   } catch (err) {
     console.error("fetchInquiry error:", err);
@@ -226,7 +228,7 @@ const fetchInquiry = async () => {
         <FormTable>
 
           {/* 問い合わせID */}
-          <FormRow label="問い合わせID" required>
+          <FormRow label="問い合わせID" >
   <div style={{ display: "flex", gap: "8px" }}>
     <input
       name="inquiryId"
@@ -247,20 +249,20 @@ const fetchInquiry = async () => {
   <input
     name="companyCode"
     value={form.companyCode}
-    readOnly
+    onChange={handleChange}
   />
 </FormRow>
 
           <FormRow label="会社名">
-            <input value={form.companyName} readOnly />
+            <input value={form.companyName} onChange={handleChange} />
           </FormRow>
 
           <FormRow label="商品名">
-            <input value={form.productName} readOnly />
+            <input value={form.productName} onChange={handleChange} />
           </FormRow>
 
-          <FormRow label="純正品番">
-            <input value={form.partNumber} readOnly />
+          <FormRow label="純正品番"required>
+            <input value={form.partNumber} onChange={handleChange} />
           </FormRow>
 
           {/* 数量 */}
@@ -278,20 +280,20 @@ const fetchInquiry = async () => {
           </FormRow>
 
           {/* 車両 */}
-          <FormRow label="車台番号">
-            <input value={form.chassisNo} readOnly />
+          <FormRow label="車台番号"required>
+            <input value={form.chassisNo} onChange={handleChange}/>
           </FormRow>
 
           <FormRow label="型式指定番号">
-            <input value={form.modelCode} readOnly />
+            <input value={form.modelCode} onChange={handleChange} />
           </FormRow>
 
           <FormRow label="類別区分番号">
-            <input value={form.classCode} readOnly />
+            <input value={form.classCode} onChange={handleChange}/>
           </FormRow>
 
           {/* 電話 */}
-          <FormRow label="電話番号">
+          <FormRow label="電話番号"required>
             <input
               name="phone"
               value={form.phone}
@@ -300,7 +302,7 @@ const fetchInquiry = async () => {
           </FormRow>
 
           {/* 配送先 */}
-          <FormRow label="配送先">
+          <FormRow label="配送先"required>
             <select
               name="addressType"
               value={form.addressType}
@@ -330,7 +332,7 @@ const fetchInquiry = async () => {
           </FormRow>
 
           {/* 同意 */}
-          <FormRow label="同意">
+          <FormRow label="同意"required>
             <label>
               <input
                 type="checkbox"

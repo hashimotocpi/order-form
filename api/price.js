@@ -3,7 +3,7 @@ export default async function handler(req, res) {
     const { partNumber } = req.query;
 
     const url =
-      "https://script.google.com/macros/s/AKfycbw_H4qpReLYRlcVQFJADRcJEhlurUYNUnnc-Toi0gLaezAo38J1CDng7LeM1s7dqajY/exec" +
+      "https://script.google.com/macros/s/AKfycbxGehN-tepbqpyik5E55WS0u9LzG0B4Y1SkmJQWWTGpmgAWiMjQsQ3tt0hLJyEQFpFy/exec" +
       `?type=getPrice&partNumber=${encodeURIComponent(partNumber)}`;
 
     const response = await fetch(url);

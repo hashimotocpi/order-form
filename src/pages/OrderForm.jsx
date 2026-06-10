@@ -366,29 +366,29 @@ const fetchInquiry = async () => {
           </FormRow>
 
           <FormRow label="お届け希望">
-  <div>
-    <label>
-      <input
-        type="radio"
-        name="deliveryDateType"
-        value="fast"
-        checked={form.deliveryDateType === "fast"}
-        onChange={handleChange}
-      />
-      最短
-    </label>
+          <div className="delivery-type">
+  <label className="radio-card">
+    <input
+      type="radio"
+      name="deliveryDateType"
+      value="fast"
+      checked={form.deliveryDateType === "fast"}
+      onChange={handleChange}
+    />
+    最短
+  </label>
 
-    <label style={{ marginLeft: "20px" }}>
-      <input
-        type="radio"
-        name="deliveryDateType"
-        value="date"
-        checked={form.deliveryDateType === "date"}
-        onChange={handleChange}
-      />
-      日付指定
-    </label>
-  </div>
+  <label className="radio-card">
+    <input
+      type="radio"
+      name="deliveryDateType"
+      value="date"
+      checked={form.deliveryDateType === "date"}
+      onChange={handleChange}
+    />
+    日付指定
+  </label>
+</div>
 
   {form.deliveryDateType === "date" && (
     <>
@@ -459,15 +459,15 @@ const fetchInquiry = async () => {
 
           {/* 同意 */}
           <FormRow label="同意"required>
-            <label>
-              <input
-                type="checkbox"
-                name="agree"
-                checked={form.agree}
-                onChange={handleChange}
-              />
-              利用規約に同意する
-            </label>
+          <label className="agree-box">
+            <input
+              type="checkbox"
+              name="agree"
+              checked={form.agree}
+              onChange={handleChange}
+                      />
+  <span>利用規約に同意する</span>
+          </label>
           </FormRow>
 
         </FormTable>

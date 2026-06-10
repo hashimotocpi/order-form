@@ -248,6 +248,34 @@ body {
 }
 
 /* =========================
+   注意事項
+========================= */
+
+.notice-box {
+  margin-bottom: 15px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  background: #f8f8f8;
+  border-radius: 5px;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.notice-box strong {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.notice-box p {
+  margin: 0 0 8px;
+}
+
+.notice-box {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* =========================
    ボタン
 ========================= */
 

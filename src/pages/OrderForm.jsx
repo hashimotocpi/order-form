@@ -458,17 +458,37 @@ const fetchInquiry = async () => {
           </FormRow>
 
           {/* 同意 */}
-          <FormRow label="同意"required>
-          <label className="agree-box">
-            <input
-              type="checkbox"
-              name="agree"
-              checked={form.agree}
-              onChange={handleChange}
-                      />
-  <span>利用規約に同意する</span>
-          </label>
-          </FormRow>
+<FormRow label="同意" required>
+
+<div className="notice-box">
+  <strong>注意事項</strong>
+
+  <p>・事前に適合および在庫の確認をお済ませの上、ご購入ください。</p>
+
+  <p>・ご注文のタイミングにより、即日発送できない場合がございます。</p>
+
+  <p>・【コア返却必須】同梱の送り状にて必ずご返却ください。</p>
+
+  <p>・互換品を発送する場合がございます。</p>
+
+  <p>・保証内容は規約のとおりとなります。</p>
+
+  <p>・発送後のお客様都合による返品は、キャンセル料として購入価格の50％および一部送料をご請求いたします。</p>
+
+  <p>・お問い合わせなしでのご注文については、保証対象外となる場合がございます。</p>
+</div>
+
+<label className="agree-box">
+  <input
+    type="checkbox"
+    name="agree"
+    checked={form.agree}
+    onChange={handleChange}
+  />
+  <span>注意事項に同意し購入する</span>
+</label>
+
+</FormRow>
 
         </FormTable>
 

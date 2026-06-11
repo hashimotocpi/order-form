@@ -7,7 +7,7 @@ import FormRow from "../components/FormRow";
 export default function OrderForm({ user }) {
   const [confirm, setConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const [isOrdered, setIsOrdered] = useState(false);
   const [form, setForm] = useState({
     inquiryId: "",
 
@@ -179,9 +179,9 @@ const fetchInquiry = async () => {
       const data = await res.json();
 
       if (data.success) {
-        alert("発注完了しました");
-        setConfirm(false);
-      } else {
+        setIsOrdered(true);
+      }
+       else {
         alert("発注失敗");
       }
     } catch (err) {
@@ -200,34 +200,34 @@ const fetchInquiry = async () => {
       <Layout user={user}>
         <Section title="発注内容確認">
           <FormTable>
-            <FormRow label="問い合わせID">{form.inquiryId}</FormRow>
-            <FormRow label="会社名">{form.companyName}</FormRow>
-            <FormRow label="商品名">{form.productName}</FormRow>
-            <FormRow label="品番">{form.partNumber}</FormRow>
+          <FormRow label="会社名">{form.companyName}</FormRow>
+          <FormRow label="商品名">{form.productName}</FormRow>
+          <FormRow label="品番">{form.partNumber}</FormRow>
+          <FormRow label="数量">{form.quantity}</FormRow>
 
-            <FormRow label="数量">{form.quantity}</FormRow>
+          <FormRow label="担当者名">{form.customerName}</FormRow>
+          <FormRow label="郵便番号">{form.zipCode}</FormRow>
+          <FormRow label="住所">{form.address}</FormRow>
+          <FormRow label="電話番号">{form.tel}</FormRow>
+          <FormRow label="メールアドレス">{form.email}</FormRow>
 
-            <FormRow label="合計金額">
-              {totalPrice.toLocaleString()} 円
-            </FormRow>
+          <FormRow label="合計金額">
+            {totalPrice.toLocaleString()} 円
+                    </FormRow>
 
-            <FormRow label="配送先">
-              {form.addressType === "company"
-                ? "登録住所"
-                : form.address}
-            </FormRow>
-            
-            <FormRow label="お届け希望">
-             
-             {form.deliveryDateType === "fast"
-             
-               ? "最短"
-             
-               : `${form.deliveryDate} ${form.deliveryTime}`}
-            
-            </FormRow>
+          <FormRow label="配送先">
+            {form.addressType === "company"
+              ? "登録住所"
+              : form.address}
+          </FormRow>
 
-            <FormRow label="備考">{form.memo}</FormRow>
+          <FormRow label="お届け希望">
+            {form.deliveryDateType === "fast"
+              ? "最短"
+              : `${form.deliveryDate} ${form.deliveryTime}`}
+          </FormRow>
+
+          <FormRow label="備考">{form.memo}</FormRow>
           </FormTable>
 
           <div className="button-area">
@@ -243,6 +243,33 @@ const fetchInquiry = async () => {
       </Layout>
     );
   }
+
+// =========================
+// 発注完了画面
+// =========================
+if (isOrdered) {
+  return (
+    <Layout user={user} title="注文完了">
+      <div style={{ textAlign: "center", padding: "60px 20px" }}>
+        <h2>ご注文ありがとうございました。</h2>
+
+        <p>ご注文を受け付けました。</p>
+
+        <p>
+          内容を確認後、
+          <br />
+          出荷手続きを進めさせていただきます。
+        </p>
+
+        <p>
+          営業時間（平日9:00～17:00）外のご注文は
+          <br />
+          翌営業日の対応となります。
+        </p>
+      </div>
+    </Layout>
+  );
+}
 
   // =========================
   // 入力画面

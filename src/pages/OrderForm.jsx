@@ -24,10 +24,10 @@ export default function OrderForm({ user }) {
     classCode: "",
 
     phone: "",
-
+    postalCode: "",
     addressType: "company",
     address: "",
-
+    deliveryName: "", 
     deliveryDateType: "fast",
     deliveryDate: "",
     deliveryTime: "",
@@ -177,17 +177,14 @@ const fetchInquiry = async () => {
       });
       
       const data = await res.json();
-      
-      alert(JSON.stringify(data));
-      
+                 
       if (data.success) {
-        alert("success");
-        setIsOrdered(true);
+                setIsOrdered(true);
       } else {
         alert("発注失敗");
       }
       if (data.success) {
-        alert("success");
+        setConfirm(false);
         setIsOrdered(true);
       }
        else {
@@ -238,16 +235,16 @@ if (isOrdered) {
         <Section title="発注内容確認">
           <FormTable>
           <FormRow label="会社名">{form.companyName}</FormRow>
+          <FormRow label="担当者名">{form.customerName}</FormRow>
           <FormRow label="商品名">{form.productName}</FormRow>
           <FormRow label="品番">{form.partNumber}</FormRow>
           <FormRow label="数量">{form.quantity}</FormRow>
 
-          <FormRow label="担当者名">{form.customerName}</FormRow>
-          <FormRow label="郵便番号">{form.zipCode}</FormRow>
-          <FormRow label="住所">{form.address}</FormRow>
-          <FormRow label="電話番号">{form.tel}</FormRow>
-          <FormRow label="メールアドレス">{form.email}</FormRow>
-
+        　<FormRow label="電話番号">{form.tel}</FormRow>
+          <FormRow label="郵便番号">{form.postalCode}</FormRow>
+          <FormRow label="住配送先住所">{form.address}</FormRow>
+          <FormRow label="配送先名">{form.deliveryName}</FormRow>
+          
           <FormRow label="合計金額">
             {totalPrice.toLocaleString()} 円
                     </FormRow>
@@ -280,7 +277,6 @@ if (isOrdered) {
       </Layout>
     );
   }
-
 
   // =========================
   // 入力画面
@@ -320,6 +316,13 @@ if (isOrdered) {
             <input
              name="companyName"
              value={form.companyName} 
+             onChange={handleChange} />
+          </FormRow>
+
+          <FormRow label="担当者名">
+            <input
+             name="customerName"
+             value={form.customerName} 
              onChange={handleChange} />
           </FormRow>
 
@@ -393,14 +396,37 @@ if (isOrdered) {
               <option value="custom">別住所へ配送</option>
             </select>
 
+            {form.addressType === "company" && (
+                <div style={{ marginTop: "10px" }}>
+                  {form.companyAddress}
+                </div>
+              )}
+
             {form.addressType === "custom" && (
-              <input
-                name="address"
-                value={form.address}
-                onChange={handleChange}
-                placeholder="配送先住所"
-              />
-            )}
+
+              <>
+                <input
+                  name="postalCode"
+                  value={form.postalCode}
+                  onChange={handleChange}
+                  placeholder="郵便番号"
+                />
+
+                <input
+                  name="address"
+                  value={form.address}
+                  onChange={handleChange}
+                  placeholder="配送先住所"
+                />
+
+                <input
+                  name="deliveryName"
+                  value={form.deliveryName}
+                  onChange={handleChange}
+                  placeholder="配送先名"
+                />
+              </>
+              )}
           </FormRow>
 
           <FormRow label="お届け希望">

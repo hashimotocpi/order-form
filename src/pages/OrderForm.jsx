@@ -179,6 +179,7 @@ const fetchInquiry = async () => {
       const data = await res.json();
 
       if (data.success) {
+        alert("success");
         setIsOrdered(true);
       }
        else {

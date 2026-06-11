@@ -107,7 +107,7 @@ export default function Login({ setUser }) {
 
         <div style={{
           marginTop: "20px",
-          color: "#fff",
+          color: "#000000",
           lineHeight: "1.8",
         }}>
           会員登録済みのお客様は、

@@ -177,7 +177,15 @@ const fetchInquiry = async () => {
       });
       
       const data = await res.json();
-
+      
+      alert(JSON.stringify(data));
+      
+      if (data.success) {
+        alert("success");
+        setIsOrdered(true);
+      } else {
+        alert("発注失敗");
+      }
       if (data.success) {
         alert("success");
         setIsOrdered(true);
@@ -192,6 +200,34 @@ const fetchInquiry = async () => {
 
     setLoading(false);
   };
+
+// =========================
+// 発注完了画面
+// =========================
+if (isOrdered) {
+  return (
+    <Layout user={user} title="注文完了">
+      <div style={{ textAlign: "center", padding: "60px 20px" }}>
+        <h2>ご注文ありがとうございました。</h2>
+
+        <p>ご注文を受け付けました。</p>
+
+        <p>
+          内容を確認後、
+          <br />
+          出荷手続きを進めさせていただきます。
+        </p>
+
+        <p>
+          営業時間（平日9:00～17:00）外のご注文は
+          <br />
+          翌営業日の対応となります。
+        </p>
+      </div>
+    </Layout>
+  );
+}
+
 
   // =========================
   // 確認画面
@@ -245,32 +281,6 @@ const fetchInquiry = async () => {
     );
   }
 
-// =========================
-// 発注完了画面
-// =========================
-if (isOrdered) {
-  return (
-    <Layout user={user} title="注文完了">
-      <div style={{ textAlign: "center", padding: "60px 20px" }}>
-        <h2>ご注文ありがとうございました。</h2>
-
-        <p>ご注文を受け付けました。</p>
-
-        <p>
-          内容を確認後、
-          <br />
-          出荷手続きを進めさせていただきます。
-        </p>
-
-        <p>
-          営業時間（平日9:00～17:00）外のご注文は
-          <br />
-          翌営業日の対応となります。
-        </p>
-      </div>
-    </Layout>
-  );
-}
 
   // =========================
   // 入力画面
